@@ -34,7 +34,6 @@ int main()
             cout << "请输入该单词出现的次数：";
             cin >> count;
             trie.insert(word, count);
-            cout << "输入成功";
         }
 
         else if (choice == 2)
