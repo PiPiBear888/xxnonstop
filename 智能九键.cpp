@@ -4,27 +4,31 @@
 #include <string>
 #include <algorithm>
 #include <regex>
-
-class TrieNode {
+using namespace std;
+class TrieNode 
+{
 public:
-    std::unordered_map<char, TrieNode*> children;
+    unordered_map<char, TrieNode*> children;
     int count; // 输入次数
     bool is_end_of_word; // 是否为完整单词的结尾
 
     TrieNode() : count(0), is_end_of_word(false) {}
 };
 
-class Trie {
+class Trie 
+{
 private:
     TrieNode* root;
 
 public:
-    Trie() {
+    Trie() 
+    {
         root = new TrieNode();
     }
 
     // 插入字符串及输入次数
-    void insert(const std::string& word, int count) {
+    void insert(const string& word, int count) 
+    {
         TrieNode* node = root;
         for (char c : word) {
             if (node->children.find(c) == node->children.end()) {
@@ -37,11 +41,12 @@ public:
     }
 
     // 删除目标字符串
-    bool remove(const std::string& word) {
+    bool remove(const string& word) 
+    {
         return removeHelper(root, word, 0);
     }
 
-    bool removeHelper(TrieNode* node, const std::string& word, int index) {
+    bool removeHelper(TrieNode* node, const string& word, int index) {
         if (index == word.size()) {
             if (!node->is_end_of_word) {
                 return false; // 该字符串不存在
@@ -68,7 +73,7 @@ public:
     }
 
     // 查询字符串输入次数
-    int getCount(const std::string& word) {
+    int getCount(const string& word) {
         TrieNode* node = root;
         for (char c : word) {
             if (node->children.find(c) == node->children.end()) {
@@ -80,7 +85,7 @@ public:
     }
 
     // 查询以某个前缀开头的所有字符串
-    void getWordsWithPrefix(const std::string& prefix, std::vector<std::pair<std::string, int>>& result) {
+    void getWordsWithPrefix(const string& prefix, vector<pair<string, int>>& result) {
         TrieNode* node = root;
         for (char c : prefix) {
             if (node->children.find(c) == node->children.end()) {
@@ -92,7 +97,7 @@ public:
     }
 
     // 深度优先搜索
-    void dfs(TrieNode* node, const std::string& prefix, std::vector<std::pair<std::string, int>>& result) {
+    void dfs(TrieNode* node, const string& prefix, vector<pair<string, int>>& result) {
         if (node->is_end_of_word) {
             result.push_back({prefix, node->count});
         }
@@ -102,13 +107,13 @@ public:
     }
 
     // 正则查询：匹配满足条件的字符串
-    void queryRegex(const std::string& regex_str, std::vector<std::pair<std::string, int>>& result) {
-        std::regex reg(regex_str);
+    void queryRegex(const string& regex_str, vector<pair<string, int>>& result) {
+        regex reg(regex_str);
         queryRegexHelper(root, "", result, reg);
     }
 
-    void queryRegexHelper(TrieNode* node, const std::string& current_str, std::vector<std::pair<std::string, int>>& result, const std::regex& reg) {
-        if (node->is_end_of_word && std::regex_match(current_str, reg)) {
+    void queryRegexHelper(TrieNode* node, const string& current_str, vector<pair<string, int>>& result, const regex& reg) {
+        if (node->is_end_of_word && regex_match(current_str, reg)) {
             result.push_back({current_str, node->count});
         }
         for (auto& child : node->children) {
@@ -116,3 +121,73 @@ public:
         }
     }
 };
+
+int main() 
+{
+    Trie trie;
+    while(true)
+    {
+        int choice{ 0 };
+        cout << "star欢迎使用智能九键输入法!" << endl
+        << "请选择您要进行的操作：" << endl
+        << "1.增加目标字符串及对应的输入次数" << endl
+        << "2.删除目标字符串" << endl
+        << "3.修改目标字符串及对应的输入次数" << endl
+        << "4.查询输入法中满足正则表达式的所有单词" << endl
+        << "5.通过输入字符串查询该字符串在输入法中的输入次数" << endl
+        << "6.通过输入字符串查询以该字符串为前缀的所有字符串及其输入次数" << endl
+        << "7.查询输入法中出现频率最高的字符串" << endl
+        << "8.查询输入法中所有字符串及输入次数" << endl
+        << "9.退出程序" << endl
+        << "皮皮熊邀请你请输入操作前的数字：";
+    cin >> choice;
+    if (choice == 1)
+    {
+        string word;
+        int count;
+        trie.insert (word,count);
+    }
+
+    else if (choice == 2)
+    {
+        string word;
+        trie.remove (word);
+    }
+
+    else if (choice == 3)
+    {
+        cout << "star还没实现" << endl;
+    }
+
+    else if (choice == 4)
+    {
+        cout << "star还没实现" << endl;
+    }
+
+    else if (choice == 5)
+    {
+       cout << "ppx和star还没实现" << endl;
+    }
+
+    else if (choice == 6)
+    {
+       cout << "ppx和star还没实现" << endl;
+    }
+
+    else if (choice == 7)
+    {
+        cout << "ppx和star还没实现" << endl;
+    }
+
+    else if (choice == 8)
+    {
+        cout << "ppx和star还没实现" << endl;
+    }
+
+    else
+    {
+        cout << "多给一分求求了" << endl;
+    }
+    }
+    return 0;
+}
