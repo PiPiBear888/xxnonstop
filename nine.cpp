@@ -74,15 +74,27 @@ bool Trie::removeHelper(TrieNode* node, const std::string& word, int index) {
 }
 
 // 查询字符串输入次数
-int Trie::getCount(const string& word) {
+void Trie::getCount(const string& word) 
+{
     TrieNode* node = root;
-    for (char c : word) {
-        if (node->children.find(c) == node->children.end()) {
-            return -1; // 字符串不存在
+    for (char c : word) 
+    {
+        if (node->children.find(c) == node->children.end()) 
+        {
+            std::cout << word << " 不存在输入系统中" << std::endl;
+            return;  // 如果字符不存在，返回错误信息
         }
         node = node->children[c];
     }
-    return node->is_end_of_word ? node->count : -1;
+    // 如果字符串存在并且是完整的单词
+    if (node->is_end_of_word) 
+    {
+        std::cout << word << " " << node->count << std::endl;  // 输出输入次数
+    }
+    else 
+    {
+        std::cout << word << " 不存在输入系统中" << std::endl;  // 如果没有标记为结束节点，说明不完整
+    }
 }
 
 // 查询以某个前缀开头的所有字符串
