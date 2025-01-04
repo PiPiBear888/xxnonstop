@@ -28,7 +28,7 @@ public:
     void insert(const std::string& word, int count);// 插入字符串及输入次数
     void remove(const std::string& word);// 删除目标字符串
     bool removeHelper(TrieNode* node, const std::string& word, int index); //删除的辅助函数
-    int getCount(const std::string& word);// 查询字符串输入次数
+    void getCount(const std::string& word);// 查询字符串输入次数
     void getWordsWithPrefix(const std::string& prefix, std::vector<std::pair<std::string, int>>& result);// 查询以某个前缀开头的所有字符串
     void dfs(TrieNode* node, const std::string& prefix, std::vector<std::pair<std::string, int>>& result);// 深度优先搜索
     void regexSearch(const std::string& regex);// 正则查询:匹配满足条件的字符串
