@@ -9,8 +9,8 @@ class TrieNode
 {
 public:
     std::unordered_map<char, TrieNode*> children;
-    int count; // ÊäÈë´ÎÊı
-    bool is_end_of_word; // ÊÇ·ñÎªÍêÕûµ¥´ÊµÄ½áÎ²
+    int count; // è¾“å…¥æ¬¡æ•°
+    bool is_end_of_word; // æ˜¯å¦ä¸ºå®Œæ•´å•è¯çš„ç»“å°¾
 
     TrieNode() : count(0), is_end_of_word(false) {}
 };
@@ -25,12 +25,12 @@ public:
     {
         root = new TrieNode();
     }
-    void insert(const std::string& word, int count);// ²åÈë×Ö·û´®¼°ÊäÈë´ÎÊı
-    bool remove(const std::string& word);// É¾³ıÄ¿±ê×Ö·û´®
-    bool removeHelper(TrieNode* node, const std::string& word, int index); //É¾³ıµÄ¸¨Öúº¯Êı
-    int getCount(const std::string& word);// ²éÑ¯×Ö·û´®ÊäÈë´ÎÊı
-    void getWordsWithPrefix(const std::string& prefix, std::vector<std::pair<std::string, int>>& result);// ²éÑ¯ÒÔÄ³¸öÇ°×º¿ªÍ·µÄËùÓĞ×Ö·û´®
-    void dfs(TrieNode* node, const std::string& prefix, std::vector<std::pair<std::string, int>>& result);// Éî¶ÈÓÅÏÈËÑË÷
-    void queryRegex(const std::string& regex_str, std::vector<std::pair<std::string, int>>& result);// ÕıÔò²éÑ¯:Æ¥ÅäÂú×ãÌõ¼şµÄ×Ö·û´®
-    void queryRegexHelper(TrieNode* node, const std::string& current_str, std::vector<std::pair<std::string, int>>& result, const std::regex& reg); //ÕıÔò²éÑ¯¸¨Öúº¯Êı
+    void insert(const std::string& word, int count);// æ’å…¥å­—ç¬¦ä¸²åŠè¾“å…¥æ¬¡æ•°
+    void remove(const std::string& word);// åˆ é™¤ç›®æ ‡å­—ç¬¦ä¸²
+    bool removeHelper(TrieNode* node, const std::string& word, int index); //åˆ é™¤çš„è¾…åŠ©å‡½æ•°
+    int getCount(const std::string& word);// æŸ¥è¯¢å­—ç¬¦ä¸²è¾“å…¥æ¬¡æ•°
+    void getWordsWithPrefix(const std::string& prefix, std::vector<std::pair<std::string, int>>& result);// æŸ¥è¯¢ä»¥æŸä¸ªå‰ç¼€å¼€å¤´çš„æ‰€æœ‰å­—ç¬¦ä¸²
+    void dfs(TrieNode* node, const std::string& prefix, std::vector<std::pair<std::string, int>>& result);// æ·±åº¦ä¼˜å…ˆæœç´¢
+    void regexSearch(const std::string& regex);// æ­£åˆ™æŸ¥è¯¢:åŒ¹é…æ»¡è¶³æ¡ä»¶çš„å­—ç¬¦ä¸²
+    void regexSearchHelper(TrieNode* node, const std::string& regex, int index, std::string& current, std::vector<std::string>& result); //æ­£åˆ™æŸ¥è¯¢è¾…åŠ©å‡½æ•°
 };
