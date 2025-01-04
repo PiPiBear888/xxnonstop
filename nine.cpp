@@ -6,7 +6,6 @@
 #include <regex>
 #include "nine.h"
 using namespace std;
-// 插入字符串及输入次数
 void Trie::insert(const string& word, int count) // 插入字符串及输入次数
 {
     TrieNode* node = root;
@@ -109,16 +108,68 @@ void Trie::dfs(TrieNode* node, const string& prefix, vector<pair<string, int>>& 
 }
 
 // 正则查询：匹配满足条件的字符串
-void Trie::queryRegex(const string& regex_str, vector<pair<string, int>>& result) {
-    regex reg(regex_str);
-    queryRegexHelper(root, "", result, reg);
+void Trie::regexSearch(const std::string& regex)
+{
+    std::vector<std::string> result;
+    std::string current = "";
+    regexSearchHelper(root, regex, 0, current, result);
+
+    // 输出结果
+    if (result.empty()) {
+        std::cout << "没有匹配的单词" << std::endl;
+    }
+    else {
+        for (const auto& word : result) {
+            std::cout << word << " ";
+        }
+        std::cout << std::endl;
+    }
 }
 
-void Trie::queryRegexHelper(TrieNode* node, const string& current_str, vector<pair<string, int>>& result, const regex& reg) {
-    if (node->is_end_of_word && regex_match(current_str, reg)) {
-        result.push_back({ current_str, node->count });
+void Trie::regexSearchHelper(TrieNode* node, const std::string& regex, int index, std::string& current, std::vector<std::string>& result) {
+    // 如果已经遍历到字符串的结尾
+    if (index == regex.size()) 
+    {
+        if (node->is_end_of_word) 
+        {
+            result.push_back(current);
+        }
+        return;
     }
-    for (auto& child : node->children) {
-        queryRegexHelper(child.second, current_str + child.first, result, reg);
+
+    char c = regex[index];
+
+    // 处理 '*'，可以匹配任意字符，递归两条路径
+    if (c == '*') 
+    {
+        // 第一条路径：当前字符不消耗，直接递归子节点
+        regexSearchHelper(node, regex, index + 1, current, result);
+
+        // 第二条路径：当前字符消耗，继续递归当前节点的子节点
+        for (auto& child : node->children) 
+        {
+            current.push_back(child.first);
+            regexSearchHelper(child.second, regex, index, current, result);
+            current.pop_back();
+        }
+    }
+    // 处理 '?'，匹配任意单个字符
+    else if (c == '?') 
+    {
+        for (auto& child : node->children) 
+        {
+            current.push_back(child.first);
+            regexSearchHelper(child.second, regex, index + 1, current, result);
+            current.pop_back();
+        }
+    }
+    // 处理普通字符
+    else {
+        if (node->children.find(c) != node->children.end()) 
+        {
+            current.push_back(c);
+            regexSearchHelper(node->children[c], regex, index + 1, current, result);
+            current.pop_back();
+        }
     }
 }
