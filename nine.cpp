@@ -6,21 +6,33 @@
 #include <regex>
 #include "nine.h"
 using namespace std;
-// ²åÈë×Ö·û´®¼°ÊäÈë´ÎÊı
-void Trie::insert(const string& word, int count)
+// æ’å…¥å­—ç¬¦ä¸²åŠè¾“å…¥æ¬¡æ•°
+void Trie::insert(const string& word, int count) // æ’å…¥å­—ç¬¦ä¸²åŠè¾“å…¥æ¬¡æ•°
 {
     TrieNode* node = root;
-    for (char c : word) {
-        if (node->children.find(c) == node->children.end()) {
+    for (char c : word) 
+    {
+        if (node->children.find(c) == node->children.end()) 
+        {
             node->children[c] = new TrieNode();
         }
         node = node->children[c];
     }
-    node->is_end_of_word = true;
-    node->count = count;
+    if (node->is_end_of_word) 
+    {
+        // å¦‚æœç›®æ ‡å­—ç¬¦ä¸²å·²å­˜åœ¨ï¼Œè¾“å‡ºå·²å­˜åœ¨å’Œè¾“å…¥æ¬¡æ•°
+        std::cout << word << " å­˜åœ¨ï¼Œå·²è¾“å…¥æ¬¡æ•°ä¸º " << node->count << " æ¬¡" << std::endl;
+    }
+    else 
+    {
+        // æ’å…¥æ–°çš„å­—ç¬¦ä¸²
+        node->is_end_of_word = true;
+        node->count = count;
+        std::cout << "æ·»åŠ æˆåŠŸ" << std::endl;
+    }
 }
 
-// É¾³ıÄ¿±ê×Ö·û´®
+// åˆ é™¤ç›®æ ‡å­—ç¬¦ä¸²
 bool Trie::remove(const string& word)
 {
     return removeHelper(root, word, 0);
@@ -29,20 +41,20 @@ bool Trie::remove(const string& word)
 bool Trie::removeHelper(TrieNode* node, const string& word, int index) {
     if (index == word.size()) {
         if (!node->is_end_of_word) {
-            return false; // ¸Ã×Ö·û´®²»´æÔÚ
+            return false; // è¯¥å­—ç¬¦ä¸²ä¸å­˜åœ¨
         }
         node->is_end_of_word = false;
-        return node->children.empty(); // Ö»ÓĞÒ¶×Ó½áµãÊ±£¬É¾³ı¸Ã½Úµã
+        return node->children.empty(); // åªæœ‰å¶å­ç»“ç‚¹æ—¶ï¼Œåˆ é™¤è¯¥èŠ‚ç‚¹
     }
 
     char ch = word[index];
     if (node->children.find(ch) == node->children.end()) {
-        return false; // ×Ö·û´®²»´æÔÚ
+        return false; // å­—ç¬¦ä¸²ä¸å­˜åœ¨
     }
 
     bool should_delete_current_node = removeHelper(node->children[ch], word, index + 1);
 
-    // Èç¹û×Ó½Úµã²»ÔÙÓĞÆäËü×Ó½Úµã£¬É¾³ı¸Ã×Ó½Úµã
+    // å¦‚æœå­èŠ‚ç‚¹ä¸å†æœ‰å…¶å®ƒå­èŠ‚ç‚¹ï¼Œåˆ é™¤è¯¥å­èŠ‚ç‚¹
     if (should_delete_current_node) {
         delete node->children[ch];
         node->children.erase(ch);
@@ -52,31 +64,31 @@ bool Trie::removeHelper(TrieNode* node, const string& word, int index) {
     return false;
 }
 
-// ²éÑ¯×Ö·û´®ÊäÈë´ÎÊı
+// æŸ¥è¯¢å­—ç¬¦ä¸²è¾“å…¥æ¬¡æ•°
 int Trie::getCount(const string& word) {
     TrieNode* node = root;
     for (char c : word) {
         if (node->children.find(c) == node->children.end()) {
-            return -1; // ×Ö·û´®²»´æÔÚ
+            return -1; // å­—ç¬¦ä¸²ä¸å­˜åœ¨
         }
         node = node->children[c];
     }
     return node->is_end_of_word ? node->count : -1;
 }
 
-// ²éÑ¯ÒÔÄ³¸öÇ°×º¿ªÍ·µÄËùÓĞ×Ö·û´®
+// æŸ¥è¯¢ä»¥æŸä¸ªå‰ç¼€å¼€å¤´çš„æ‰€æœ‰å­—ç¬¦ä¸²
 void Trie::getWordsWithPrefix(const string& prefix, vector<pair<string, int>>& result) {
     TrieNode* node = root;
     for (char c : prefix) {
         if (node->children.find(c) == node->children.end()) {
-            return; // ÎŞÇ°×º
+            return; // æ— å‰ç¼€
         }
         node = node->children[c];
     }
     dfs(node, prefix, result);
 }
 
-// Éî¶ÈÓÅÏÈËÑË÷
+// æ·±åº¦ä¼˜å…ˆæœç´¢
 void Trie::dfs(TrieNode* node, const string& prefix, vector<pair<string, int>>& result) {
     if (node->is_end_of_word) {
         result.push_back({ prefix, node->count });
@@ -86,7 +98,7 @@ void Trie::dfs(TrieNode* node, const string& prefix, vector<pair<string, int>>& 
     }
 }
 
-// ÕıÔò²éÑ¯£ºÆ¥ÅäÂú×ãÌõ¼şµÄ×Ö·û´®
+// æ­£åˆ™æŸ¥è¯¢ï¼šåŒ¹é…æ»¡è¶³æ¡ä»¶çš„å­—ç¬¦ä¸²
 void Trie::queryRegex(const string& regex_str, vector<pair<string, int>>& result) {
     regex reg(regex_str);
     queryRegexHelper(root, "", result, reg);
