@@ -39,6 +39,8 @@ int main()
         else if (choice == 2)
         {
             string word;
+            cout << "请输入要删除的单词：";
+            cin >> word;
             trie.remove(word);
         }
 
