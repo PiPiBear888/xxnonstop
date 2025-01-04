@@ -66,7 +66,10 @@ int main()
 
         else if (choice == 6)
         {
-            cout << "ppx和star还没实现" << endl;
+            string word;
+            cout << "请输入要查询的单词：";
+            cin >> word;
+            trie.getCount(word);
         }
 
         else if (choice == 7)
