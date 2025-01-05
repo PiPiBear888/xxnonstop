@@ -44,33 +44,37 @@ void Trie::remove(const std::string& word) {
 // 辅助函数：递归删除字符串
 bool Trie::removeHelper(TrieNode* node, const std::string& word, int index) {
     if (index == word.size()) {
-        // 如果已经遍历到最后，检查是否为完整字符串
-        if (node->is_end_of_word) {
-            node->is_end_of_word = false; // 标记为非有效字符串
-            return true; // 删除成功
-        }
-        return false; // 字符串不存在
+    // 如果已经遍历到最后，检查是否为完整字符串
+    if (node->is_end_of_word) {
+        node->is_end_of_word = false; // 标记为非有效字符串
+        return true; // 删除成功
     }
+    return false; // 字符串不存在
+}
 
-    char ch = word[index];
-    // 如果当前字符不在子节点中，说明目标字符串不存在
-    if (node->children.find(ch) == node->children.end()) {
-        return false; // 字符串不存在
-    }
+char ch = word[index];
+// 如果当前字符不在子节点中，说明目标字符串不存在
+if (node->children.find(ch) == node->children.end()) {
+    return false; // 字符串不存在
+}
 
-    // 递归删除
-    bool can_delete = removeHelper(node->children[ch], word, index + 1);
+// 递归删除
+bool can_delete = removeHelper(node->children[ch], word, index + 1);
 
-    // 如果子节点可以删除且该节点没有其他子节点，也可以删除当前节点
-    if (can_delete) {
-        delete node->children[ch];
-        node->children.erase(ch);
-
-        // 如果当前节点不是字符串的结束节点且没有子节点，则当前节点也可以删除
-        return node->children.empty() && !node->is_end_of_word;
-    }
-
-    return false;
+// 如果子节点可以删除且该节点没有其他子节点，也可以删除当前节点
+if (can_delete&& node->children[ch]->children.empty())
+{
+    delete node->children[ch];
+    node->children.erase(ch);
+    // 如果当前节点不是字符串的结束节点且没有子节点，则当前节点也可以删除
+    return true;
+}
+else if(can_delete && !node->children[ch]->children.empty())
+{ 
+    node->children[ch]->is_end_of_word = false;
+    return true;
+}
+return false;
 }
 
 // 查询字符串输入次数
